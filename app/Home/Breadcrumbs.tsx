@@ -20,7 +20,7 @@ export default function Breadcrumbs() {
           <li>
             <a>
 
-            Dua's Importance 
+            Dua&apos;s Importance 
 
             </a>
           </li>
