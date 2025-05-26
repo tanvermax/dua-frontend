@@ -40,19 +40,19 @@ export default function Dualist() {
   const [expandedSubCategory, setExpandedSubCategory] = useState<number | null>(null);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/dua").then((res) => setDUas(res.data));
+    axios.get("https://dua-backend-wfmz.onrender.com/api/dua").then((res) => setDUas(res.data));
   }, []);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/categories");
-        const data = await res.json();
-        setCategories(data);
+        const [catRes, subCatRes] = await Promise.all([
+          axios.get("https://dua-backend-wfmz.onrender.com/api/categories"),
+          axios.get("https://dua-backend-wfmz.onrender.com/api/sub_categories")
+        ]);
 
-        const subCategoriesRes = await fetch("http://localhost:5000/api/sub_categories");
-        const subCategoriesData = await subCategoriesRes.json();
-        setSub_Categories(subCategoriesData);
+        setCategories(catRes.data);
+        setSub_Categories(subCatRes.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
