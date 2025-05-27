@@ -3,6 +3,9 @@ import { Amiri, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navber from "./components/Navber";
 import Topbar from "./components/Topbar";
+import Sidebar from "./dua/Sidebar";
+import Middlebar from "./components/Middlebar";
+import Endbar from "./dua/Endbar";
 
 
 
@@ -39,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" >
-     <body className={`${geistSans.variable} ${geistMono.variable} ${amiri.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${amiri.variable} antialiased`}>
 
         <main className="grid grid-cols-26 ">
           <div className="">
@@ -47,8 +50,21 @@ export default function RootLayout({
           </div>
           <div className="col-span-25">
             <Topbar />
+            <div className="bg-white h-screen grid grid-cols-16 ">
+              <div className="col-span-3 border-r-[1px] border-[#E1EBE1] bg-[#F8F9F8]">
+                <Sidebar />
+              </div>
+              <div className="col-span-10 overflow-y-scroll">
+                <Middlebar />
+                {children}
+              </div>
+              <div className="col-span-3 border-l-[1px] border-[#E1EBE1] ">
+                <Endbar />
+              </div>
 
-            {children}
+            </div>
+
+            
           </div>
         </main>
       </body>

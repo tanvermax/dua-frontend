@@ -45,13 +45,13 @@ export default function MainDua() {
 
 
     useEffect(() => {
-        axios.get("https://dua-backend-wfmz.onrender.com/api/dua")
+        axios.get("http://localhost:5000/api/dua")
             .then((res) => setDua(res.data));
     }, []);
 
 
     useEffect(() => {
-        axios.get("https://dua-backend-wfmz.onrender.com/api/sub_categories")
+        axios.get("http://localhost:5000/api/sub_categories")
             .then((res) => setSubCategory(res.data));
     }, []);
 
@@ -91,6 +91,7 @@ export default function MainDua() {
                         </p>
                     </section></>)
             } */}
+            
             {dua.map((duaData, index) => (
                 <div key={`${duaData.dua_id}-${index}`} className="border-b-2 border-[#EEF6EB]">
 

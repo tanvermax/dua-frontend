@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import image from "./../../public/dua1.png";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface Dua {
   id: number;
@@ -38,17 +39,24 @@ export default function Dualist() {
   const [duas, setDUas] = useState<DuaResponse[]>([]);
   const [expandedCategory, setExpandedCategory] = useState<number | null>(null);
   const [expandedSubCategory, setExpandedSubCategory] = useState<number | null>(null);
+  // http://localhost:5000/
 
+  const pathname = usePathname();
+
+  console.log(pathname);
+  
+
+  // http://localhost:5000
   useEffect(() => {
-    axios.get("https://dua-backend-wfmz.onrender.com/api/dua").then((res) => setDUas(res.data));
+    axios.get("http://localhost:5000/api/dua").then((res) => setDUas(res.data));
   }, []);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const [catRes, subCatRes] = await Promise.all([
-          axios.get("https://dua-backend-wfmz.onrender.com/api/categories"),
-          axios.get("https://dua-backend-wfmz.onrender.com/api/sub_categories")
+          axios.get("http://localhost:5000/api/categories"),
+          axios.get("http://localhost:5000/api/sub_categories")
         ]);
 
         setCategories(catRes.data);
@@ -102,18 +110,32 @@ export default function Dualist() {
 
             {/* Subcategories */}
             {expandedCategory === dua.cat_id && (
-              <div className="ml-5 mt-2">
+              <div className="ml-2 mt-2">
                 {Sub_Categories.filter((sub) => sub.cat_id === dua.cat_id).map((sub) => (
                   <div
                     key={sub.id}
-                    className="p-2 mt-1 mr-5  transition-colors duration-200 border-l-2 border-dashed border-gray-300"
+                    className="py-2 mt-1   transition-colors duration-200 border-l-2 border-dashed border-gray-300"
                   >
                     <div
                       className="flex items-center cursor-pointer"
                       onClick={() => toggleSubCategory(sub.subcat_id)}
                     >
-                      <span className="left-14 mb-7 absolute font-medium text-gray-300">---</span>
-                      <h4 className="text-gray-700 text-[14px] ml-7">{sub.subcat_name_en}</h4>
+                      <span className="left-10 mb-7 absolute font-normal text-gray-300">---</span>
+                      
+
+                      <Link
+                          href={`/dua/${sub.id}`}
+                          className={`text-[#383638] text-[14px] ml-7 hover:text-[#417360] active:text-[#417360] transition-colors duration-200 ${
+                            pathname === `/dua/${sub.id}`
+                              ? "text-[#417360] font-bold"
+                              : ""
+                          }`}
+                          aria-current={
+                            pathname === `/dua/${sub.id}` ? "page" : undefined
+                          }
+                        >
+                          {sub.subcat_name_en}
+                        </Link>
                     </div>
 
                     {/* Duas */}
@@ -123,17 +145,17 @@ export default function Dualist() {
                           duaItem.cat_id === dua.cat_id && duaItem.subcat_id === sub.subcat_id
                       ).length > 0 ? (
                       <div className="ml-5 mt-2">
-                        <ul className="text-gray-700">
+                        <ul className="">
                           {duas
                             .filter(
                               (duaItem) =>
                                 duaItem.cat_id === dua.cat_id &&
                                 duaItem.subcat_id === sub.subcat_id
                             )
-                            .map((duaItem) => (
-                              <Link href={"/blog"} key={duaItem.id} className="flex text-[12px] gap-3 py-2 cursor-pointer">
+                            .map((duaItem,index) => (
+                              <li  key={index+duaItem.id} className="flex text-[14px] text-[#282E29] gap-3 py-2 cursor-pointer">
                                 <svg
-                                  width="30"
+                                  width="32"
                                   height="20"
                                   viewBox="0 0 18 14"
                                   fill="none"
@@ -145,8 +167,8 @@ export default function Dualist() {
                                     fill="#417360"
                                   />
                                 </svg>
-                                {duaItem.dua_name_en}
-                              </Link>
+                                {duaItem.id}. {duaItem.dua_name_en}
+                              </li>
                             ))}
                         </ul>
                       </div>

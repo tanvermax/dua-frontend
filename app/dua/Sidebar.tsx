@@ -4,7 +4,7 @@
 
 
 
-import Dualist from './Dualist';
+import Dualist from '../components/Dualist';
 
 export default function Sidebar() {
     

@@ -1,6 +1,7 @@
 import React from 'react'
 import Breadcrumbs from './Breadcrumbs'
-import MainDua from './MainDua'
+// import MainDua from './page'
+
 
 export default function Middlebar() {
 
@@ -10,11 +11,11 @@ export default function Middlebar() {
     <div className=''>
 
       <div className=' sticky  top-0'>
-      <Breadcrumbs></Breadcrumbs>
+      <Breadcrumbs ></Breadcrumbs>
       </div>
       
       
-        <MainDua></MainDua>
+        {/* <MainDua></MainDua> */}
 
 
         
