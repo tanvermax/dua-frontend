@@ -39,7 +39,7 @@ export default function Dualist() {
   const [duas, setDUas] = useState<DuaResponse[]>([]);
   const [expandedCategory, setExpandedCategory] = useState<number | null>(null);
   const [expandedSubCategory, setExpandedSubCategory] = useState<number | null>(null);
-  // http://localhost:5000/
+  // https://dua-backend-wfmz.onrender.com/
 
   const pathname = usePathname();
 
@@ -48,15 +48,15 @@ export default function Dualist() {
 
   // http://localhost:5000
   useEffect(() => {
-    axios.get("http://localhost:5000/api/dua").then((res) => setDUas(res.data));
+    axios.get("https://dua-backend-wfmz.onrender.com/api/dua").then((res) => setDUas(res.data));
   }, []);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const [catRes, subCatRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/categories"),
-          axios.get("http://localhost:5000/api/sub_categories")
+          axios.get("https://dua-backend-wfmz.onrender.com/api/categories"),
+          axios.get("https://dua-backend-wfmz.onrender.com/api/sub_categories")
         ]);
 
         setCategories(catRes.data);

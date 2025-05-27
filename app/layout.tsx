@@ -44,7 +44,7 @@ export default function RootLayout({
     <html lang="en" >
       <body className={`${geistSans.variable} ${geistMono.variable} ${amiri.variable} antialiased`}>
 
-        <main className="grid grid-cols-26 ">
+        <main className="grid grid-cols-26 absolute top-0">
           <div className="">
             <Navber />
           </div>

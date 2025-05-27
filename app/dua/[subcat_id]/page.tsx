@@ -38,24 +38,21 @@ interface Sub_Dua {
 
 
 interface SubCategoryPageProps {
-    params: { subcat_id: string };
+    params: { subcat_id: string }; // Corrected type
 }
 
 export default async function SubCategoryPage({ params }: SubCategoryPageProps) {
-
-
-
     const subcat_id = params.subcat_id;
     let duas: DuaResponse[] = [];
     let subCategory: Sub_Dua | null = null;
 
     try {
         // Fetch duas
-        const duaRes = await axios.get(`http://localhost:5000/api/dua/subcat/${subcat_id}`);
+        const duaRes = await axios.get(`https://dua-backend-wfmz.onrender.com/api/dua/subcat/${subcat_id}`);
         duas = duaRes.data;
 
         // Fetch subcategories
-        const subCatRes = await axios.get("http://localhost:5000/api/sub_categories");
+        const subCatRes = await axios.get("https://dua-backend-wfmz.onrender.com/api/sub_categories");
         const subCategories: Sub_Dua[] = subCatRes.data;
         // Find the subcategory matching subcat_id
         subCategory = subCategories.find((sub) => sub.subcat_id === Number(subcat_id)) || null;
@@ -68,25 +65,8 @@ export default async function SubCategoryPage({ params }: SubCategoryPageProps) 
         return notFound(); // Show 404 if API fails
     }
 
-    //   const [Sub_Categories, setSub_Categories] = useState<Sub_Dua[]>([]);
 
-
-    //   useEffect(() => {
-    //     axios.get("http://localhost:5000/api/sub_categories")
-    //     .then((res) => setSub_Categories(res.data));
-    //   }, []);
-
-
-    // console.log(Sub_Categories);
-
-
-    // absolute top-31  left-[51vh] w-[59vw] h-19 -z-0
     return (
-
-
-        
-
-
             <>
             <section className="bg-[#EEF6EB] ">
                 <p className="text-base text-gray-500 p-7 flex gap-2">

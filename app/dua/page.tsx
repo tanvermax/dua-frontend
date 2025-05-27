@@ -45,13 +45,13 @@ export default function MainDua() {
 
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/dua")
+        axios.get("https://dua-backend-wfmz.onrender.com/api/dua")
             .then((res) => setDua(res.data));
     }, []);
 
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/sub_categories")
+        axios.get("https://dua-backend-wfmz.onrender.com/api/sub_categories")
             .then((res) => setSubCategory(res.data));
     }, []);
 
