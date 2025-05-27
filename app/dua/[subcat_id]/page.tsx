@@ -1,83 +1,73 @@
-import axios from "axios";
-// import Image from "next/image";
-// import Link from "next/link";
-import { notFound } from "next/navigation";
+"use client"
 
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "next/navigation";
 
 interface DuaResponse {
-    id: number;
-    cat_id: number;
-    subcat_id: number;
-    dua_id: number;
-    dua_name_en: string;
-    dua_name_bn: string;
-    top_en: string;
-    top_bn: string;
-    refference_en: string;
-    refference_bn: string;
-    audio: string | null;
-    bottom_bn: string | null;
-    bottom_en: string | null;
-    clean_arabic: string | null;
-    dua_arabic: string | null;
-    dua_indopak: string | null;
-    translation_bn: string | null;
-    translation_en: string | null;
-    transliteration_bn: string | null;
-    transliteration_en: string | null;
+  id: number;
+  cat_id: number;
+  subcat_id: number;
+  dua_id: number;
+  dua_name_en: string;
+  dua_name_bn: string;
+  top_en: string;
+  top_bn: string;
+  refference_en: string;
+  refference_bn: string;
+  audio: string | null;
+  bottom_bn: string | null;
+  bottom_en: string | null;
+  clean_arabic: string | null;
+  dua_arabic: string | null;
+  dua_indopak: string | null;
+  translation_bn: string | null;
+  translation_en: string | null;
+  transliteration_bn: string | null;
+  transliteration_en: string | null;
 }
 
-interface Sub_Dua {
-    cat_id: number;
-    id: number;
-    no_of_dua: number;
-    subcat_id: number;
-    subcat_name_bn?: string;
-    subcat_name_en: string;
-}
+export default function SubCategoryPage() {
+  const [duas, setDuas] = useState<DuaResponse[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  const params = useParams();
+  const subcat_id = params?.subcat_id as string;
 
-interface SubCategoryPageProps {
-    params: { subcat_id: string }; // Corrected type
-}
+  useEffect(() => {
+    if (!subcat_id) return;
 
-export default async function SubCategoryPage({ params }: SubCategoryPageProps) {
-    const subcat_id = params.subcat_id;
-    let duas: DuaResponse[] = [];
-    let subCategory: Sub_Dua | null = null;
+    const fetchDuas = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `https://dua-backend-wfmz.onrender.com/api/dua/subcat/${subcat_id}`
+        );
+        setDuas(response.data);
+      } catch (err) {
+        console.error("Error fetching duas:", err);
+        setError("Failed to load duas. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    try {
-        // Fetch duas
-        const duaRes = await axios.get(`https://dua-backend-wfmz.onrender.com/api/dua/subcat/${subcat_id}`);
-        duas = duaRes.data;
+    fetchDuas();
+  }, [subcat_id]);
 
-        // Fetch subcategories
-        const subCatRes = await axios.get("https://dua-backend-wfmz.onrender.com/api/sub_categories");
-        const subCategories: Sub_Dua[] = subCatRes.data;
-        // Find the subcategory matching subcat_id
-        subCategory = subCategories.find((sub) => sub.subcat_id === Number(subcat_id)) || null;
+  if (loading) return <div className="text-center p-4">Loading...</div>;
+  if (error) return <div className="text-red-500 text-center p-4">{error}</div>;
 
-        if (!duas.length || !subCategory) {
-            return notFound(); // Show 404 if no duas or subcategory found
-        }
-    } catch (error) {
-        console.error("Error fetching data:", error);
-        return notFound(); // Show 404 if API fails
-    }
-
-
-    return (
-            <>
-            <section className="bg-[#EEF6EB] ">
-                <p className="text-base text-gray-500 p-7 flex gap-2">
-                    <span className="font-semibold text-green-700">
-                        Section: <span className="text-gray-800 font-normal">{subCategory.subcat_name_en}</span>
-                    </span>
-                </p>
-            </section>
-            <div className="p-10">
-            {/* <h2 className="text-xl font-bold mb-4">Duas for Subcategory {subcat_id}</h2> */}
-            {duas.map((duaData, index) => (
+  return (
+    <section className="bg-[#EEF6EB] min-h-screen">
+      
+      <div className="p-4">
+        {duas.length === 0 ? (
+          <p className="text-center">No duas found for this subcategory.</p>
+        ) : (
+          <div className="grid gap-4">
+             {duas.map((duaData, index) => (
                 <div key={`${duaData.dua_id}-${index}`} className="border-b-2 border-[#EEF6EB]">
 
 
@@ -166,7 +156,9 @@ export default async function SubCategoryPage({ params }: SubCategoryPageProps) 
                     </div>
                 </div>
             ))}
-        </div></>
-    );
+          </div>
+        )}
+      </div>
+    </section>
+  );
 }
-
